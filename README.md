@@ -16,7 +16,7 @@ My hyprland,zsh,plymouth,sddm and Archinstall dots and configs with a install sc
 ## Quick Installation
 
 ```bash
-bash <(curl -s coming soon)
+bash <(curl -s https://raw.githubusercontent.com/g-flame-oss/GfDE/refs/heads/main/clone.sh)
 ```
 
 ## Key Features
