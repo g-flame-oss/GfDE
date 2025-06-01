@@ -46,4 +46,3 @@ This project is licensed under the [MIT License](LICENSE).
 
 **Note:** This installer Dots and Configs are independently maintained and not officially affiliated with the original HyDE project developers.
 
-
