@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=Arch Mac Style
+Description=Mac-like Plymouth theme for Arch Linux with PNG assets
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/arch-mac-style
+ScriptFile=/usr/share/plymouth/themes/arch-mac-style/arch-mac-style.script

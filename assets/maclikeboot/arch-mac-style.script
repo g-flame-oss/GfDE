@@ -1,0 +1,138 @@
+# Plymouth Script for Mac-like Arch Linux Theme
+
+# Screen and window setup
+screen_width = Window.GetWidth();
+screen_height = Window.GetHeight();
+resolutions = Window.GetBitsPerPixel();
+
+# Set solid background color (black)
+Window.SetBackgroundTopColor(0, 0, 0);
+Window.SetBackgroundBottomColor(0, 0, 0);
+
+# Load and setup logo
+logo_image = Image("logo.png");
+logo_sprite = Sprite(logo_image);
+
+# Position logo in center-top area
+logo_x = screen_width / 2 - logo_image.GetWidth() / 2;
+logo_y = screen_height * 0.3;
+logo_sprite.SetPosition(logo_x, logo_y);
+
+# Progress bar setup (Mac-like thin progress bar)
+progress_bar_bg = Image("progress_bg.png");
+progress_bar_fill = Image("progress_fill.png");
+
+# Position progress bar below logo
+bar_width = 300;
+bar_height = 8;
+bar_x = screen_width / 2 - bar_width / 2;
+bar_y = logo_y + logo_image.GetHeight() + 60;
+
+# Scale progress bar images
+progress_bar_bg = progress_bar_bg.Scale(bar_width, bar_height);
+progress_bar_fill = progress_bar_fill.Scale(bar_width, bar_height);
+
+# Create progress bar sprites
+progress_bg_sprite = Sprite(progress_bar_bg);
+progress_bg_sprite.SetPosition(bar_x, bar_y);
+
+progress_fill_sprite = Sprite();
+progress_fill_sprite.SetPosition(bar_x, bar_y);
+
+# Progress tracking
+progress = 0;
+
+# Boot progress callback
+fun boot_progress_cb(duration, progress_val) {
+    progress = progress_val;
+    
+    # Calculate fill width based on progress
+    fill_width = bar_width * progress;
+    
+    # Create cropped fill image
+    if (fill_width > 0) {
+        fill_image = progress_bar_fill.Scale(fill_width, bar_height);
+        progress_fill_sprite.SetImage(fill_image);
+        progress_fill_sprite.SetOpacity(1);
+    } else {
+        progress_fill_sprite.SetOpacity(0);
+    }
+}
+
+Plymouth.SetBootProgressFunction(boot_progress_cb);
+
+# System update progress (for package manager operations)
+fun system_update_cb(progress_val) {
+    boot_progress_cb(0, progress_val);
+}
+
+Plymouth.SetUpdateStatusFunction(system_update_cb);
+
+# Root filesystem progress
+fun root_mounted_cb() {
+    # Fade in effect when root is mounted
+    logo_sprite.SetOpacity(1);
+}
+
+Plymouth.SetRootMountedFunction(root_mounted_cb);
+
+# Display message function
+message_sprite = Sprite();
+message_sprite.SetPosition(screen_width / 2, bar_y + 40);
+
+fun display_message_cb(text) {
+    message_image = Image.Text(text, 1, 1, 1, 1, "Sans 12");
+    message_sprite.SetImage(message_image);
+    message_sprite.SetPosition(screen_width / 2 - message_image.GetWidth() / 2, bar_y + 40);
+}
+
+Plymouth.SetDisplayMessageFunction(display_message_cb);
+
+# Password prompt (for encrypted systems)
+question_sprite = Sprite();
+answer_sprite = Sprite();
+
+fun display_question_cb(prompt, entry) {
+    question_image = Image.Text(prompt, 1, 1, 1, 1, "Sans 12");
+    question_sprite.SetImage(question_image);
+    question_sprite.SetPosition(screen_width / 2 - question_image.GetWidth() / 2, bar_y + 60);
+    
+    answer_image = Image.Text(entry, 1, 1, 1, 1, "Sans 12");
+    answer_sprite.SetImage(answer_image);
+    answer_sprite.SetPosition(screen_width / 2 - answer_image.GetWidth() / 2, bar_y + 80);
+}
+
+Plymouth.SetDisplayQuestionFunction(display_question_cb);
+
+# Normal vs password mode display
+fun display_normal_cb() {
+    question_sprite.SetOpacity(0);
+    answer_sprite.SetOpacity(0);
+}
+
+fun display_password_cb(prompt, bullets) {
+    question_image = Image.Text(prompt, 1, 1, 1, 1, "Sans 12");
+    question_sprite.SetImage(question_image);
+    question_sprite.SetPosition(screen_width / 2 - question_image.GetWidth() / 2, bar_y + 60);
+    question_sprite.SetOpacity(1);
+    
+    bullet_string = "";
+    for (i = 0; i < bullets; i++) {
+        bullet_string += "●";
+    }
+    
+    answer_image = Image.Text(bullet_string, 1, 1, 1, 1, "Sans 12");
+    answer_sprite.SetImage(answer_image);
+    answer_sprite.SetPosition(screen_width / 2 - answer_image.GetWidth() / 2, bar_y + 80);
+    answer_sprite.SetOpacity(1);
+}
+
+Plymouth.SetDisplayNormalFunction(display_normal_cb);
+Plymouth.SetDisplayPasswordFunction(display_password_cb);
+
+# Refresh function (called continuously)
+fun refresh_cb() {
+    # Any continuous animations can go here
+}
+
+Plymouth.SetRefreshFunction(refresh_cb);
