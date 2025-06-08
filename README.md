@@ -24,7 +24,7 @@ bash <(curl -s https://raw.githubusercontent.com/g-flame-oss/GfDE/refs/heads/mai
 - Automated dependency management
 - Confs install
 - dots install
-
+- customizeable boot screen by changing the logo.png 
 
 ## Technical Support
 
