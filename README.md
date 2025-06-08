@@ -35,7 +35,7 @@ For assistance with installation issues, please:
 
 ## Contributors
 
-- Original Airlink Project: [HyDE](https://github.com/HyDE-Project)
+- Original Project: [HyDE](https://github.com/HyDE-Project)
 - GfDE Dev: [G-flame](https://github.com/g-flame)
 
 ## Legal Information
@@ -44,5 +44,5 @@ This project is licensed under the [MIT License](LICENSE).
 
 ---
 
-**Note:** This installer Dots and Configs are independently maintained and not officially affiliated with the original HyDE project developers.
+**Note:** This installer Dots and Configs are independently maintained and not officially affiliated with the original HyDE project and its developers.
 

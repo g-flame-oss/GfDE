@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 #==============================================================================
 # GfDE Installer
-# Version: 1.0
+# Version: 0.1
 # Author: g-flame (https://github.com/g-flame)
 # Based on HyDE! with custom modifications
 # License: MIT
+# Yeah, this is basically HyDE but with my own twist on it
+# Don't judge me, I like pretty desktops and smooth boot animations
 #==============================================================================
 ##########################################################################################
 #       Installer by G-flame @ https://github.com/g-flame                                
@@ -32,46 +34,44 @@
 #       OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE   
 #       SOFTWARE.                                                                        
 ##########################################################################################
-
 #==============================================================================
-# COLOR DEFINITIONS
+# COLORS (because life's too short for boring terminals)
 #==============================================================================
-readonly RD='\033[00;31m'    # Red
-readonly GN='\033[00;32m'    # Green
-readonly YW='\033[00;33m'    # Yellow
-readonly BE='\033[00;34m'    # Blue
-readonly MG='\033[00;35m'    # Magenta
-readonly CY='\033[00;36m'    # Cyan
-readonly WE='\033[01;37m'    # White (Bold)
-readonly NC='\033[00;37m'    # No Color (Reset)
-readonly BD='\033[1m'        # Bold
-readonly UL='\033[4m'        # Underline
-
+readonly RED='\033[00;31m'
+readonly GREEN='\033[00;32m'
+readonly YELLOW='\033[00;33m'
+readonly BLUE='\033[00;34m'
+readonly PURPLE='\033[00;35m'
+readonly CYAN='\033[00;36m'
+readonly WHITE='\033[01;37m'
+readonly RESET='\033[00;37m'
+readonly BOLD='\033[1m'
+readonly UNDERLINE='\033[4m'
 #==============================================================================
-# LOGGING FUNCTIONS
+# LOGGING (with personality!)
 #==============================================================================
-log_info() {
-    echo -e "${CY}[INFO]${NC} $1"
+say_info() {
+    echo -e "${CYAN}[INFO]${RESET} $1"
 }
 
-log_success() {
-    echo -e "${GN}[SUCCESS]${NC} $1"
+celebrate() {
+    echo -e "${GREEN}[SUCCESS]${RESET} $1"
 }
 
-log_warning() {
-    echo -e "${YW}[WARNING]${NC} $1"
+warn_user() {
+    echo -e "${YELLOW}[HEADS UP!]${RESET} $1"
 }
 
-log_error() {
-    echo -e "${RD}[ERROR]${NC} $1"
+oh_no() {
+    echo -e "${RED}[OOPS]${RESET} $1"
 }
 
-log_step() {
-    echo -e "${BE}[STEP]${NC} $1"
+next_step() {
+    echo -e "${BLUE}[DOING]${RESET} $1"
 }
 
 #==============================================================================
-# UTILITY FUNCTIONS
+# UTILITY FUNCTIONS (the helpful stuff)
 #==============================================================================
 show_progress() {
     local current=$1
@@ -81,83 +81,81 @@ show_progress() {
     local bar_length=30
     local filled_length=$((percent * bar_length / 100))
     
-    printf "\r${CY}[$message]${NC} ["
+    printf "\r${CYAN}[$message]${RESET} ["
     printf "%*s" $filled_length | tr ' ' '█'
     printf "%*s" $((bar_length - filled_length)) | tr ' ' '░'
     printf "] %d%% (%d/%d)" $percent $current $total
 }
 
-press_any_key() {
-    echo -e "\n${YW}Press any key to continue...${NC}"
+wait_for_user() {
+    echo -e "\n${YELLOW}Hit any key when you're ready...${RESET}"
     read -n 1 -s
 }
 
-confirm_action() {
+ask_user() {
     local message=$1
-    echo -e "${YW}$message (y/N): ${NC}"
+    echo -e "${YELLOW}$message (y/N): ${RESET}"
     read -r response
     [[ "$response" =~ ^[Yy]$ ]]
 }
 
 #==============================================================================
-# ASCII ART BANNER
+# BANNER (gotta look cool, right?)
 #==============================================================================
-display_banner() {
+show_banner() {
     clear
-    echo -e "${MG}${BD}"
+    echo -e "${PURPLE}${BOLD}"
     echo "  ╔════════════════════════════════════════════════════════════════╗"
     echo "  ║                                                                ║"
-    echo "  ║     ___  ____  ____  ____                                     ║"
-    echo "  ║    / __)(  __)(    \\(  __)                                    ║"
-    echo "  ║   ( (_ \\ ) _)  ) D ( ) _)                                     ║"
-    echo "  ║    \\___/(__)  (____/(____) ${GN}Desktop Environment${MG}           ║"
+    echo "  ║     ___  ____  ____   ____                                     ║"
+    echo "  ║    / __)(  __)(    \ (  __)                                    ║"
+    echo "  ║   ( (__\\ ) _)  ) D ( ) _)                                      ║"
+    echo -e "  ║    \\___/(__)  (____/(____) ${GREEN}Desktop Environment${PURPLE}                 ║"
     echo "  ║                                                                ║"
     echo "  ╚════════════════════════════════════════════════════════════════╝"
-    echo -e "${NC}"
-    echo -e "${CY}${BD}GfDE Script by g-flame${NC} ${WE}(https://github.com/g-flame)${NC}"
-    echo -e "${WE}Based on HyDE! with custom modifications and dotfiles${NC}"
-    echo -e "${GN}License: MIT${NC}"
+    echo -e "${RESET}"
+    echo -e "${CYAN}${BOLD}Made by g-flame with some caffeine and determination${RESET}"
+    echo -e "${WHITE}Based on HyDE but with my own flavor${RESET}"
+    echo -e "${GREEN}License: MIT (because sharing is caring)${RESET}"
     echo ""
 }
 
 #==============================================================================
-# MAIN MENU
+# MAIN MENU (where the magic begins)
 #==============================================================================
-show_main_menu() {
-    display_banner
+show_welcome() {
+    show_banner
     
-    dialog --title " GfDE Installer v1.0" \
-           --backtitle "GfDE Desktop Environment Setup" \
-           --yesno "Welcome to the GfDE installer!\n\nThis will set up a beautiful desktop environment based on Hyprland.\n\n  WARNING: This will modify your system configuration.\n Please ensure you have backups of important data.\n\n🚀 Ready to start the installation?" 12 70
+    dialog --title " Welcome to GfDE! 🚀" \
+           --backtitle "Let's make your desktop beautiful" \
+           --yesno "Hey there! Welcome to my little desktop environment project.\n\nThis is going to set up a pretty sweet Hyprland-based desktop with some custom touches I've been working on.\n\n⚠️  Fair warning: This will mess with your system config.\nMake sure you've got backups of anything important!\n\nReady to dive in?" 14 70
     
     local response=$?
     if [ $response -eq 0 ]; then
         clear
-        display_banner
-        show_installer_menu
+        show_banner
+        show_installer_options
     else
-        log_info "Installation cancelled by user."
+        say_info "No worries! Maybe next time. 👋"
         exit 0
     fi
 }
 
 #==============================================================================
-# INSTALLER MENU
+# INSTALLER OPTIONS (pick your poison)
 #==============================================================================
-show_installer_menu() {
+show_installer_options() {
     local tmp_file=$(mktemp)
     
-    dialog --title "  GfDE Installer - Component Selection" \
-           --backtitle "Choose components to install" \
-           --checklist "Select the components you want to install:\n\n  Dependencies will be installed automatically" 20 80 8 \
-           1 " Hyprland & Core Dependencies (Required)" on \
-           2 " Custom Dotfiles & Configurations" off \
-           3 " GTK Themes & Cursor Themes" off \
-           4 " Boot Animation (Plymouth)" off \
-           5 " Additional Software Bundle" off 2>"$tmp_file"
+    dialog --title "  What do you want to install?" \
+           --backtitle "Pick what sounds good to you" \
+           --checklist "Alright, here's what I've got for you:\n\n(Don't worry, I'll handle the dependencies)" 16 80 3 \
+           1 " The Core Stuff (Hyprland + essentials) - You need this!" on \
+           2 " Full GfDE Experience (Desktop + Boot animation)" off \
+           3 " Extra Apps (Because who doesn't like more software?)" off 2>"$tmp_file"
     
     if [ $? -ne 0 ]; then
-        log_info "Installation cancelled by user."
+        say_info "Changed your mind? That's cool. See ya! 👋"
         rm -f "$tmp_file"
         exit 1
     fi
@@ -166,95 +164,77 @@ show_installer_menu() {
     rm -f "$tmp_file"
     
     if [[ -z "$choices" ]]; then
-        log_warning "No components selected. Exiting..."
+        warn_user "You didn't pick anything. Can't install nothing! 🤷‍♂️"
         exit 1
     fi
     
-    # Display selected components
-    echo -e "\n${BD}${CY}Selected Components:${NC}"
+    # Show what they picked
+    echo -e "\n${BOLD}${CYAN}Alright, here's what we're doing:${RESET}"
     for choice in $choices; do
         case $choice in
-            "\"1\"") echo -e "  ${GN}✓${NC} Hyprland & Core Dependencies" ;;
-            "\"2\"") echo -e "  ${GN}✓${NC} Custom Dotfiles & Configurations" ;;
-            "\"3\"") echo -e "  ${GN}✓${NC} GTK Themes & Cursor Themes" ;;
-            "\"4\"") echo -e "  ${GN}✓${NC} Boot Animation (Plymouth)" ;;
-            "\"5\"") echo -e "  ${GN}✓${NC} Additional Software Bundle" ;;
+            1) echo -e "  ${GREEN}✓${RESET} Core Hyprland setup" ;;
+            2) echo -e "  ${GREEN}✓${RESET} Full GfDE experience with boot animation" ;;
+            3) echo -e "  ${GREEN}✓${RESET} Extra applications" ;;
         esac
     done
     
     echo ""
-    if ! confirm_action "Proceed with installation?"; then
-        log_info "Installation cancelled by user."
+    if ! ask_user "Look good? Let's do this thing!"; then
+        say_info "Alright, maybe later then!"
         exit 1
     fi
     
-    # Execute installations
+    # Do the installations
     for choice in $choices; do
         case $choice in
-            "\"1\"") install_base_system ;;
-            "\"2\"") install_dotfiles ;;
-            "\"3\"") install_themes ;;
-            "\"4\"") install_boot_animation ;;
-            "\"5\"") install_additional_software ;;
+            1) install_the_basics ;;
+            2) install_full_gfde ;;
+            3) pick_extra_apps ;;
         esac
     done
     
-    show_completion_summary
+    wrap_it_up
 }
 
 #==============================================================================
-# BASE SYSTEM INSTALLATION
+# BASIC INSTALLATION (the foundation)
 #==============================================================================
-install_base_system() {
+install_the_basics() {
     clear
-    display_banner
-    log_step "Installing Hyprland and core dependencies..."
+    show_banner
+    next_step "Setting up the basic Hyprland stuff..."
     
-    # Update system first
-    log_info "Updating system packages..."
-    if ! sudo pacman -Sy; then
-        log_error "Failed to update package database!"
-        return 1
-    fi
-    
-    # Install git if not present
-    log_info "Installing git..."
-    if ! sudo pacman -S --needed --noconfirm git; then
-        log_error "Failed to install git!"
-        return 1
-    fi
-    
-    # Clone HyDE repository
-    log_info "Cloning HyDE repository..."
+    # Get HyDE
+    say_info "Grabbing the HyDE project..."
     if [[ -d "HyDE" ]]; then
-        log_warning "HyDE directory already exists, removing..."
+        warn_user "Found an old HyDE folder, cleaning it up..."
         rm -rf HyDE
     fi
     
     if ! git clone https://github.com/HyDE-Project/HyDE.git; then
-        log_error "Failed to clone HyDE repository!"
+        oh_no "Couldn't clone HyDE. Check your internet?"
         return 1
     fi
     
-    # Prepare custom package list
-    log_info "Preparing custom package configuration..."
+    # Apply my custom package list if it exists
+    say_info "Checking for my custom package tweaks..."
     if [[ -f "assets/pkg_core.lst" ]]; then
         sudo chmod +x HyDE/Scripts/install.sh
         [[ -f "HyDE/Scripts/pkg_core.lst" ]] && rm HyDE/Scripts/pkg_core.lst
         cp assets/pkg_core.lst HyDE/Scripts/
-        log_success "Custom package list applied!"
+        celebrate "Applied my custom package list!"
     else
-        log_warning "Custom package list not found, using default HyDE packages"
+        warn_user "No custom packages found, using HyDE defaults"
     fi
     
-    # Run HyDE installation
-    log_info "Running HyDE installation script..."
-    log_warning "This may take several minutes depending on your internet connection..."
+    # Run the HyDE installer
+    say_info "Running the HyDE installer... (grab some coffee, this takes a while)"
+    warn_user "Seriously, go make coffee. This isn't quick."
     
     if bash HyDE/Scripts/install.sh; then
-        log_success "Base HyDE installation completed successfully!"
+        celebrate "HyDE is installed! We're getting somewhere! 🎉"
     else
-        log_error "HyDE installation failed!"
+        oh_no "HyDE installation failed. That's unfortunate."
         return 1
     fi
     
@@ -262,218 +242,228 @@ install_base_system() {
 }
 
 #==============================================================================
-# DOTFILES INSTALLATION
+# FULL GFDE INSTALLATION (the whole shebang)
 #==============================================================================
-install_dotfiles() {
+install_full_gfde() {
     clear
-    display_banner
-    log_step "Installing custom dotfiles..."
+    show_banner
+    next_step "Installing the full GfDE experience..."
     
-    log_warning "Dotfiles installation is coming soon!"
-    log_info "This feature will include:"
-    echo -e "  ${CY}•${NC} Custom Hyprland configurations"
-    echo -e "  ${CY}•${NC} Waybar themes and configs"
-    echo -e "  ${CY}•${NC} Terminal configurations"
-    echo -e "  ${CY}•${NC} Application-specific settings"
+    # Boot animation first
+    setup_boot_animation
     
-    press_any_key
+    # Then desktop environment
+    setup_desktop_environment
 }
 
 #==============================================================================
-# THEMES INSTALLATION
+# BOOT ANIMATION SETUP (because booting should be pretty)
 #==============================================================================
-install_themes() {
-    clear
-    display_banner
-    log_step "Installing GTK and cursor themes..."
+setup_boot_animation() {
+    next_step "Setting up that sweet boot animation..."
     
-    log_warning "Theme installation is coming soon!"
-    log_info "This feature will include:"
-    echo -e "  ${CY}•${NC} Custom GTK themes"
-    echo -e "  ${CY}•${NC} Icon packs"
-    echo -e "  ${CY}•${NC} Cursor themes"
-    echo -e "  ${CY}•${NC} Wallpaper collection"
-    
-    press_any_key
-}
-
-#==============================================================================
-# BOOT ANIMATION INSTALLATION
-#==============================================================================
-install_boot_animation() {
-    clear
-    display_banner
-    log_step "Setting up boot animation (Plymouth)..."
-    
-    # Check if Plymouth is installed
+    # Check for Plymouth
     if ! pacman -Qi plymouth &> /dev/null; then
-        log_info "Installing Plymouth..."
+        say_info "Installing Plymouth (for the boot animation)..."
         if ! sudo pacman -S --needed --noconfirm plymouth; then
-            log_error "Failed to install Plymouth"
+            oh_no "Plymouth installation failed"
             return 1
         fi
-        log_success "Plymouth installed successfully"
+        celebrate "Plymouth is ready to go!"
     else
-        log_info "Plymouth is already installed"
+        say_info "Plymouth is already here, nice!"
     fi
     
-    # Define theme paths
-    local theme_source="assets/maclikeboot"
-    local theme_dest="/usr/share/plymouth/themes/maclikeboot"
-    local theme_name="maclikeboot"
+    # Theme setup
+    local theme_source="assets/gfde-boot-theme"
+    local theme_dest="/usr/share/plymouth/themes/gfde"
+    local theme_name="gfde"
     
-    # Check if source theme exists
+    # Check if we have the theme files
     if [[ ! -d "$theme_source" ]]; then
-        log_error "Theme source directory not found: $theme_source"
-        log_warning "Please ensure the theme files are in the correct location"
+        oh_no "Can't find the GfDE theme files at: $theme_source"
+        warn_user "Make sure the theme files are in the right place!"
         return 1
     fi
     
-    # Create backup of current configuration
-    log_info "Creating backup of current configuration..."
+    # Backup current config
+    say_info "Backing up your current config (just in case)..."
     sudo cp /etc/mkinitcpio.conf /etc/mkinitcpio.conf.backup 2>/dev/null || true
-    log_success "Configuration backed up"
+    celebrate "Config backed up safely"
     
-    # Install theme
-    log_info "Installing maclikeboot theme..."
+    # Install the theme
+    say_info "Installing the GfDE boot theme..."
     sudo mkdir -p "$(dirname "$theme_dest")"
     sudo cp -r "$theme_source" "$theme_dest"
     sudo chmod -R 755 "$theme_dest"
     sudo chown -R root:root "$theme_dest"
-    log_success "Theme files installed"
+    celebrate "Theme files are in place!"
     
     # Configure mkinitcpio
-    log_info "Configuring initramfs..."
+    say_info "Configuring the initramfs..."
     if ! grep -q "plymouth" /etc/mkinitcpio.conf; then
         sudo sed -i '/^HOOKS=/ s/)/ plymouth)/' /etc/mkinitcpio.conf
-        log_success "Plymouth hook added to mkinitcpio"
+        celebrate "Plymouth hook added"
     else
-        log_info "Plymouth hook already present in mkinitcpio"
+        say_info "Plymouth hook was already there"
     fi
     
-    # Set theme as default
-    log_info "Setting maclikeboot as default theme..."
+    # Set as default theme
+    say_info "Making GfDE the default boot theme..."
     if sudo plymouth-set-default-theme "$theme_name"; then
-        log_success "Theme set successfully"
+        celebrate "GfDE theme is now active!"
     else
-        log_error "Failed to set theme"
+        oh_no "Couldn't set the GfDE theme"
         return 1
     fi
     
     # Configure bootloader
-    configure_bootloader
+    setup_bootloader
     
-    # Enable Plymouth services
-    log_info "Enabling Plymouth services..."
+    # Enable services
+    say_info "Enabling Plymouth services..."
     sudo systemctl enable plymouth-start.service 2>/dev/null || true
     sudo systemctl enable plymouth-quit.service 2>/dev/null || true
-    log_success "Plymouth services enabled"
+    celebrate "Services are enabled"
     
-    # Regenerate initramfs
-    log_info "Regenerating initramfs (this may take a moment)..."
+    # Rebuild initramfs
+    say_info "Rebuilding initramfs (this might take a moment)..."
     if sudo mkinitcpio -P; then
-        log_success "Initramfs regenerated successfully"
+        celebrate "Initramfs rebuilt successfully!"
     else
-        log_error "Failed to regenerate initramfs"
+        oh_no "Failed to rebuild initramfs"
         return 1
     fi
     
-    # Verify installation
-    verify_boot_animation_install "$theme_dest" "$theme_name"
+    # Check if everything worked
+    check_boot_install "$theme_dest" "$theme_name"
 }
 
 #==============================================================================
-# BOOTLOADER CONFIGURATION
+# DESKTOP ENVIRONMENT SETUP (the main course)
 #==============================================================================
-configure_bootloader() {
-    log_info "Detecting and configuring bootloader..."
-    local bootloader_configured=false
+
+
+
+
+
+
+#Coming Soon!!
+
+
+
+setup_desktop_environment() {
+    next_step "Setting up the GfDE desktop environment..."
+
     
-    # GRUB Configuration
+    say_info "Starting the desktop environment setup..."
+
+    
+    celebrate "GfDE desktop environment is ready! 🎨"
+}
+
+
+
+
+
+
+
+
+
+
+
+#==============================================================================
+# BOOTLOADER SETUP (making sure everything boots pretty)
+#==============================================================================
+setup_bootloader() {
+    say_info "Finding and configuring your bootloader..."
+    local configured=false
+    
+    # GRUB (most common)
     if [[ -f /etc/default/grub ]] && command -v grub-mkconfig &> /dev/null; then
-        log_info "GRUB bootloader detected"
+        say_info "Found GRUB! Let's configure it..."
         
-        # Backup GRUB config
+        # Backup first
         sudo cp /etc/default/grub /etc/default/grub.backup 2>/dev/null || true
         
-        # Configure GRUB parameters
+        # Add boot parameters
         if ! grep -q "quiet.*splash\|splash.*quiet" /etc/default/grub; then
             sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="\([^"]*\)"/GRUB_CMDLINE_LINUX_DEFAULT="\1 quiet splash"/' /etc/default/grub
             sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="  */GRUB_CMDLINE_LINUX_DEFAULT="/' /etc/default/grub
-            log_success "Boot parameters added to GRUB"
+            celebrate "Added boot parameters to GRUB"
         else
-            log_info "Boot parameters already configured in GRUB"
+            say_info "GRUB already has the right parameters"
         fi
         
-        # Update GRUB configuration
-        log_info "Updating GRUB configuration..."
+        # Update GRUB
+        say_info "Updating GRUB configuration..."
         if sudo grub-mkconfig -o /boot/grub/grub.cfg; then
-            log_success "GRUB configuration updated"
-            bootloader_configured=true
+            celebrate "GRUB is all set!"
+            configured=true
         else
-            log_warning "Failed to update GRUB configuration"
+            warn_user "GRUB update didn't work perfectly"
         fi
     fi
     
-    # systemd-boot Configuration
+    # systemd-boot
     if [[ -d /boot/loader ]] && [[ -f /boot/loader/loader.conf ]]; then
-        log_info "systemd-boot detected"
+        say_info "Found systemd-boot!"
         configure_systemd_boot
-        bootloader_configured=true
+        configured=true
     fi
     
-    # rEFInd Configuration
+    # rEFInd
     if [[ -f /boot/EFI/refind/refind.conf ]] || [[ -f /boot/refind_linux.conf ]]; then
-        log_info "rEFInd bootloader detected"
+        say_info "Found rEFInd bootloader"
         configure_refind
-        bootloader_configured=true
+        configured=true
     fi
     
-    # LILO Configuration (legacy)
+    # LILO (old school)
     if [[ -f /etc/lilo.conf ]] && command -v lilo &> /dev/null; then
-        log_info "LILO bootloader detected"
+        say_info "Found LILO (retro!)"
         configure_lilo
-        bootloader_configured=true
+        configured=true
     fi
     
     # Summary
-    if [[ "$bootloader_configured" == true ]]; then
-        log_success "Bootloader configuration completed"
+    if [[ "$configured" == true ]]; then
+        celebrate "Bootloader is configured!"
     else
-        log_warning "No recognized bootloader found or configuration failed"
-        show_manual_bootloader_instructions
+        warn_user "Couldn't find or configure your bootloader automatically"
+        show_manual_bootloader_help
     fi
 }
 
 configure_systemd_boot() {
     local entries_dir="/boot/loader/entries"
-    local entries_found=false
+    local found_entries=false
     
     if [[ -d "$entries_dir" ]]; then
         for entry_file in "$entries_dir"/*.conf; do
             if [[ -f "$entry_file" ]]; then
-                entries_found=true
-                log_info "Updating systemd-boot entry: $(basename "$entry_file")"
+                found_entries=true
+                say_info "Updating systemd-boot entry: $(basename "$entry_file")"
                 
-                # Backup entry file
+                # Backup
                 sudo cp "$entry_file" "$entry_file.backup" 2>/dev/null || true
                 
-                # Add boot parameters
+                # Add parameters
                 if grep -q "^options" "$entry_file"; then
                     if ! grep -q "quiet.*splash\|splash.*quiet" "$entry_file"; then
                         sudo sed -i '/^options/ s/$/ quiet splash/' "$entry_file"
-                        log_success "Boot parameters added to $(basename "$entry_file")"
+                        celebrate "Updated $(basename "$entry_file")"
                     else
-                        log_info "Boot parameters already present in $(basename "$entry_file")"
+                        say_info "$(basename "$entry_file") already had the right parameters"
                     fi
                 else
-                    log_warning "No options line found in $(basename "$entry_file")"
+                    warn_user "No options line found in $(basename "$entry_file")"
                 fi
             fi
         done
         
-        if [[ "$entries_found" == true ]]; then
-            log_success "systemd-boot entries updated"
+        if [[ "$found_entries" == true ]]; then
+            celebrate "systemd-boot entries updated!"
         fi
     fi
 }
@@ -485,12 +475,12 @@ configure_refind() {
         
         if ! grep -q "quiet.*splash\|splash.*quiet" "$refind_linux_conf"; then
             sudo sed -i 's/"$/ quiet splash"/' "$refind_linux_conf"
-            log_success "Boot parameters added to rEFInd"
+            celebrate "rEFInd parameters added!"
         else
-            log_info "Boot parameters already configured in rEFInd"
+            say_info "rEFInd already configured"
         fi
     else
-        log_warning "rEFInd detected but refind_linux.conf not found"
+        warn_user "Found rEFInd but couldn't find refind_linux.conf"
     fi
 }
 
@@ -500,135 +490,364 @@ configure_lilo() {
     if grep -q "append=" /etc/lilo.conf; then
         if ! grep -q "quiet.*splash\|splash.*quiet" /etc/lilo.conf; then
             sudo sed -i '/append=/ s/"$/ quiet splash"/' /etc/lilo.conf
-            log_success "Boot parameters added to LILO"
+            celebrate "LILO parameters added!"
         else
-            log_info "Boot parameters already configured in LILO"
+            say_info "LILO already configured"
         fi
     else
         sudo sed -i '/^[[:space:]]*linux/ a\    append="quiet splash"' /etc/lilo.conf
-        log_success "Append line with boot parameters added to LILO"
+        celebrate "Added append line to LILO"
     fi
     
     if sudo lilo; then
-        log_success "LILO configuration updated"
+        celebrate "LILO configuration updated!"
     else
-        log_warning "Failed to update LILO"
+        warn_user "LILO update didn't work perfectly"
     fi
 }
 
-show_manual_bootloader_instructions() {
-    log_warning "Manual bootloader configuration required!"
-    echo -e "\n${BD}${YW}Please manually add 'quiet splash' to your boot parameters:${NC}"
-    echo -e "  ${CY}•${NC} GRUB: /etc/default/grub (GRUB_CMDLINE_LINUX_DEFAULT)"
-    echo -e "  ${CY}•${NC} systemd-boot: /boot/loader/entries/*.conf (options line)"
-    echo -e "  ${CY}•${NC} rEFInd: /boot/refind_linux.conf"
-    echo -e "  ${CY}•${NC} EFISTUB: Add to EFI boot entry parameters"
+show_manual_bootloader_help() {
+    warn_user "You'll need to manually add boot parameters!"
+    echo -e "\n${BOLD}${YELLOW}Here's what you need to do:${RESET}"
+    echo -e "Add 'quiet splash' to your boot parameters in:"
+    echo -e "  ${CYAN}•${RESET} GRUB: /etc/default/grub (GRUB_CMDLINE_LINUX_DEFAULT line)"
+    echo -e "  ${CYAN}•${RESET} systemd-boot: /boot/loader/entries/*.conf (options line)"
+    echo -e "  ${CYAN}•${RESET} rEFInd: /boot/refind_linux.conf"
+    echo -e "  ${CYAN}•${RESET} EFISTUB: Add to your EFI boot entry"
+    echo -e "\nDon't worry, it's not too scary! 😊"
 }
 
-verify_boot_animation_install() {
+check_boot_install() {
     local theme_dest=$1
     local theme_name=$2
     
-    log_info "Verifying installation..."
+    say_info "Checking if everything worked..."
     
     if [[ -d "$theme_dest" ]] && plymouth-set-default-theme -l | grep -q "$theme_name"; then
-        log_success "✓ Theme installed and configured successfully"
-        log_success "✓ Boot animation will be active after reboot"
+        celebrate "GfDE boot theme is installed and ready!"
+        celebrate "You'll see the boot animation after you reboot! 🚀"
         
         local current_theme=$(plymouth-set-default-theme)
-        log_info "Current theme: $current_theme"
+        say_info "Current theme: $current_theme"
         
-        echo -e "\n${BD}${GN}Boot Animation Setup Complete!${NC}"
-        echo -e "${YW}Note: Reboot required to see the boot animation${NC}"
+        echo -e "\n${BOLD}${GREEN}Boot Animation Setup Complete! 🎉${RESET}"
+        echo -e "${YELLOW}Just reboot to see it in action!${RESET}"
         return 0
     else
-        log_error "Installation verification failed"
+        oh_no "Something went wrong with the installation"
         return 1
     fi
 }
 
 #==============================================================================
-# ADDITIONAL SOFTWARE INSTALLATION
+# EXTRA APPS (because we all love software)
 #==============================================================================
-install_additional_software() {
+pick_extra_apps() {
     clear
-    display_banner
-    log_step "Installing additional software bundle..."
+    show_banner
+    next_step "Time to pick some extra apps..."
     
-    # Install Zen Browser via Flatpak
-    log_info "Installing Zen Browser..."
-    if command -v flatpak &> /dev/null; then
-        if flatpak install -y flathub app.zen_browser.zen; then
-            log_success "Zen Browser installed successfully"
-        else
-            log_warning "Failed to install Zen Browser"
-        fi
-    else
-        log_warning "Flatpak not found, skipping Zen Browser installation"
+    local tmp_file=$(mktemp)
+    
+    dialog --title " What apps do you want? 📱" \
+           --backtitle "Pick whatever sounds good" \
+           --checklist "Here's what I've got available:\n\n(Use SPACE to select, ENTER when done)" 20 80 12 \
+           1 " Firefox (because browsing)" off \
+           2 " Zen Browser (fancy Firefox alternative)" off \
+           3 " VS Code (for all the coding)" off \
+           4 " Discord (gotta stay connected)" off \
+           5 " Spotify (music = productivity)" off \
+           6 " GIMP (photo editing)" off \
+           7 " LibreOffice (office stuff)" off \
+           8 " VLC (plays everything)" off \
+           9 " Blender (3D magic)" off \
+           10 " Steam (gaming time!)" off \
+           11 " OBS Studio (streaming/recording)" off \
+           12 " Docker (containers everywhere)" off 2>"$tmp_file"
+    
+    if [ $? -ne 0 ]; then
+        say_info "No extra apps? That's fine too!"
+        rm -f "$tmp_file"
+        return
     fi
     
-    # Install Visual Studio Code via AUR
-    log_info "Installing Visual Studio Code..."
-    if command -v yay &> /dev/null; then
-        if yay -S --noconfirm visual-studio-code-bin; then
-            log_success "Visual Studio Code installed successfully"
-        else
-            log_warning "Failed to install Visual Studio Code"
-        fi
-    else
-        log_warning "YAY AUR helper not found, skipping VS Code installation"
-        log_info "Please install an AUR helper to install AUR packages"
+    local choices=$(cat "$tmp_file")
+    rm -f "$tmp_file"
+    
+    if [[ -z "$choices" ]]; then
+        warn_user "No apps selected. Moving on..."
+        return
     fi
     
-    log_success "Additional software installation completed"
+    # Show what they picked
+    echo -e "\n${BOLD}${CYAN}Cool, installing these apps:${RESET}"
+    for choice in $choices; do
+        case $choice in
+            1) echo -e "  ${GREEN}✓${RESET} Firefox" ;;
+            2) echo -e "  ${GREEN}✓${RESET} Zen Browser" ;;
+            3) echo -e "  ${GREEN}✓${RESET} VS Code" ;;
+            4) echo -e "  ${GREEN}✓${RESET} Discord" ;;
+            5) echo -e "  ${GREEN}✓${RESET} Spotify" ;;
+            6) echo -e "  ${GREEN}✓${RESET} GIMP" ;;
+            7) echo -e "  ${GREEN}✓${RESET} LibreOffice" ;;
+            8) echo -e "  ${GREEN}✓${RESET} VLC" ;;
+            9) echo -e "  ${GREEN}✓${RESET} Blender" ;;
+            10) echo -e "  ${GREEN}✓${RESET} Steam" ;;
+            11) echo -e "  ${GREEN}✓${RESET} OBS Studio" ;;
+            12) echo -e "  ${GREEN}✓${RESET} Docker" ;;
+        esac
+    done
+    clear
+    echo ""
+    if ! ask_user "Look good? Let's install these!"; then
+        say_info "Changed your mind? No problem!"
+        return
+    fi
+    
+    # Install everything
+    install_chosen_apps "$choices"
+}
+
+#==============================================================================
+# APP INSTALLATION (the actual installing)
+#==============================================================================
+install_chosen_apps() {
+    local choices=$1
+    
+    clear
+    show_banner
+    next_step "Installing your chosen apps..."
+    
+    # Make sure we have yay
+    if ! command -v yay &> /dev/null; then
+        say_info "Installing yay (AUR helper)..."
+        install_yay_helper
+    fi
+    
+    # Make sure we have flatpak
+    if ! command -v flatpak &> /dev/null; then
+        say_info "Installing Flatpak..."
+        sudo pacman -S --needed --noconfirm flatpak
+        sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+    fi
+    
+    # Install each app
+    for choice in $choices; do
+        case $choice in
+            1) install_firefox ;;
+            2) install_zen_browser ;;
+            3) install_vscode ;;
+            4) install_discord ;;
+            5) install_spotify ;;
+            6) install_gimp ;;
+            7) install_libreoffice ;;
+            8) install_vlc ;;
+            9) install_blender ;;
+            10) install_steam ;;
+            11) install_obs ;;
+            12) install_docker ;;
+        esac
+    done
+    
+    celebrate "All apps installed! 🎉"
     sleep 2
 }
 
-#==============================================================================
-# COMPLETION SUMMARY
-#==============================================================================
-show_completion_summary() {
-    clear
-    display_banner
+install_yay_helper() {
+    if ! command -v git &> /dev/null; then
+        sudo pacman -S --needed --noconfirm git
+    fi
     
-    echo -e "${BD}${GN} Installation Complete! ${NC}\n"
-    
-    echo -e "${BD}${CY}What's Next:${NC}"
-    echo -e "  ${GN}•${NC} Reboot your system to apply all changes"
-    echo -e "  ${GN}•${NC} Log in and select Hyprland from your display manager"
-    echo -e "  ${GN}•${NC} Enjoy your new desktop environment!"
-    
-    echo -e "\n${BD}${YW}Important Notes:${NC}"
-    echo -e "  ${YW}•${NC} Configuration files are backed up with .backup extension"
-    echo -e "  ${YW}•${NC} Check logs if any component didn't install correctly"
-    echo -e "  ${YW}•${NC} Visit the GitHub repository for documentation and support"
-    
-    echo -e "\n${BD}${MG}Support:${NC}"
-    echo -e "  ${CY}•${NC} GitHub: https://github.com/g-flame"
-    echo -e "  ${CY}•${NC} HyDE Project: https://github.com/HyDE-Project/HyDE"
-    
-    echo ""
-    if confirm_action "Would you like to reboot now?"; then
-        log_info "Rebooting system in 5 seconds..."
-        sleep 5
-        sudo reboot
+    cd /tmp
+    git clone https://aur.archlinux.org/yay.git
+    cd yay
+    makepkg -si --noconfirm
+    cd ~
+    rm -rf /tmp/yay
+}
+
+install_firefox() {
+    say_info "Installing Firefox..."
+    if sudo pacman -S --needed --noconfirm firefox; then
+        celebrate "Firefox is ready!"
     else
-        log_info "Remember to reboot when ready!"
+        oh_no "Firefox installation failed"
     fi
 }
 
+install_zen_browser() {
+    say_info "Installing Zen Browser..."
+    if flatpak install -y flathub io.github.zen_browser.zen; then
+        celebrate "Zen Browser installed!"
+    else
+        oh_no "Zen Browser installation failed"
+    fi
+}
+
+install_vscode() {
+    say_info "Installing VS Code..."
+    if yay -S --noconfirm visual-studio-code-bin; then
+        celebrate "VS Code is ready for coding!"
+    else
+        oh_no "VS Code installation failed"
+    fi
+}
+
+install_discord() {
+    say_info "Installing Discord..."
+    if sudo pacman -S --needed --noconfirm discord; then
+        celebrate "Discord is ready for chatting!"
+    else
+        oh_no "Discord installation failed"
+    fi
+}
+
+install_spotify() {
+    say_info "Installing Spotify..."
+    if yay -S --noconfirm spotify; then
+        celebrate "Spotify is ready for tunes!"
+    else
+        oh_no "Spotify installation failed"
+    fi
+}
+
+install_gimp() {
+    say_info "Installing GIMP..."
+    if sudo pacman -S --needed --noconfirm gimp; then
+        celebrate "GIMP is ready for photo editing!"
+    else
+        oh_no "GIMP installation failed"
+    fi
+}
+
+install_libreoffice() {
+    say_info "Installing LibreOffice..."
+    if sudo pacman -S --needed --noconfirm libreoffice-fresh; then
+        celebrate "LibreOffice is ready for documents!"
+    else
+        oh_no "LibreOffice installation failed"
+    fi
+}
+
+install_vlc() {
+    say_info "Installing VLC..."
+    if sudo pacman -S --needed --noconfirm vlc; then
+        celebrate "VLC is ready to play anything!"
+    else
+        oh_no "VLC installation failed"
+    fi
+}
+
+install_blender() {
+    say_info "Installing Blender..."
+    if sudo pacman -S --needed --noconfirm blender; then
+        celebrate "Blender is ready for 3D magic!"
+    else
+        oh_no "Blender installation failed"
+    fi
+}
+
+install_steam() {
+    say_info "Installing Steam..."
+    if sudo pacman -S --needed --noconfirm steam; then
+        celebrate "Steam is ready for gaming!"
+    else
+        oh_no "Steam installation failed"
+    fi
+}
+
+install_obs() {
+    say_info "Installing OBS Studio..."
+    if sudo pacman -S --needed --noconfirm obs-studio; then
+        celebrate "OBS is ready for streaming!"
+    else
+        oh_no "OBS installation failed"
+    fi
+}
+
+install_docker() {
+    say_info "Installing Docker..."
+    if sudo pacman -S --needed --noconfirm docker docker-compose; then
+        sudo systemctl enable docker
+        sudo usermod -aG docker $USER
+        celebrate "Docker is ready for containers!"
+        say_info "You might need to log out and back in for Docker permissions"
+    else
+        oh_no "Docker installation failed"
+    fi
+}
+
+#==============================================================================
+# FINALE (wrapping it all up)
+#==============================================================================
+wrap_it_up() {
+    clear
+    show_banner
+    
+    echo -e "${BOLD}${GREEN}🎉 We're all done! 🎉${RESET}\n"
+    
+    echo -e "${BOLD}${CYAN}What's next:${RESET}"
+    echo -e "  ${GREEN}•${RESET} Reboot your system (seriously, do it)"
+    echo -e "  ${GREEN}•${RESET} Log in and pick Hyprland from your login screen"
+    echo -e "  ${GREEN}•${RESET} Enjoy your beautiful new desktop!"
+    
+    echo -e "\n${BOLD}${YELLOW}Just so you know:${RESET}"
+    echo -e "  ${YELLOW}•${RESET} I backed up your configs (they have .backup extensions)"
+    echo -e "  ${YELLOW}•${RESET} If something broke, check the error messages above"
+    echo -e "  ${YELLOW}•${RESET} Hit me up on GitHub if you need help"
+    
+    echo -e "\n${BOLD}${PURPLE}Links and stuff:${RESET}"
+    echo -e "  ${CYAN}•${RESET} My GitHub: https://github.com/g-flame"
+    echo -e "  ${CYAN}•${RESET} HyDE Project: https://github.com/HyDE-Project/HyDE"
+    echo -e "  ${CYAN}•${RESET} Issues? Open a GitHub issue, I'll try to help!"
+    
+    echo ""
+    if ask_user "Want to reboot now? (Recommended!)"; then
+        say_info "Rebooting in 5 seconds... see you on the other side! 🚀"
+        sleep 5
+        sudo reboot
+    else
+        say_info "Don't forget to reboot when you're ready! 😊"
+        echo -e "${YELLOW}Seriously though, reboot to see the boot animation!${RESET}"
+    fi
+}
 #==============================================================================
 # CLEANUP AND ERROR HANDLING
 #==============================================================================
 cleanup_on_exit() {
-    log_info "Cleaning up temporary files..."
+    say_info "Cleaning up temporary files..."
+    
+    # Restore terminal state
     tput rmcup 2>/dev/null || true
+    tput cnorm 2>/dev/null || true
+    
+    # Clean up any temporary files
+    if [[ -n "${TEMP_FILES:-}" ]]; then
+        for temp_file in $TEMP_FILES; do
+            [[ -f "$temp_file" ]] && rm -f "$temp_file" 2>/dev/null || true
+        done
+    fi
+    
+    say_info "Thanks for trying GfDE! 👋"
     exit 0
 }
 
 handle_error() {
-    log_error "An unexpected error occurred!"
-    log_info "Check the error messages above for details"
+    local exit_code=$?
+    local line_number=${1:-"unknown"}
+    
+    # Restore terminal
+    tput rmcup 2>/dev/null || true
+    tput cnorm 2>/dev/null || true
+    
+    oh_no "An unexpected error occurred! (Exit code: $exit_code)"
+    warn_user "Check the error messages above for details"
+    
+    echo -e "\n${YELLOW}If this keeps happening:${RESET}"
+    echo -e "  ${CYAN}•${RESET} Make sure you have a stable internet connection"
+    echo -e "  ${CYAN}•${RESET} Try running the script again"
+    echo -e "  ${CYAN}•${RESET} Open an issue on GitHub if the problem persists"
+    
     cleanup_on_exit
 }
 
@@ -636,28 +855,33 @@ handle_error() {
 # SIGNAL HANDLERS
 #==============================================================================
 trap cleanup_on_exit SIGINT SIGTERM
-trap handle_error ERR
+trap 'handle_error $LINENO' ERR
 
 #==============================================================================
 # MAIN EXECUTION
 #==============================================================================
-main() {
-    # Initial system setup
-    log_info "Updating package database..."
-    sudo pacman -Sy
-    
-    log_info "Installing required dependencies..."
-    sudo pacman -S --needed --noconfirm dialog
-    
-    # Initialize screen
-    tput smcup
+main() { 
+    #Initialize screen
+    tput smcup 2>/dev/null || true
     clear
     
-    # Start main flow
-    show_main_menu
+    # Initial system setup
+    say_info "Updating package database..."
+    if ! sudo pacman -Sy; then
+        warn_user "Package database update failed, but continuing anyway..."
+    fi
     
+    say_info "Installing required dependencies..."
+    if ! sudo pacman -S --needed --noconfirm dialog; then
+        oh_no "Failed to install dialog - this is required for the installer"
+        exit 1
+    fi
+    
+    # Start main flow
+    show_welcome 
+
     # Simulate final processing (if needed)
-    echo -e "\n${CY}Finalizing installation...${NC}"
+    echo -e "\n${CYAN}Finalizing installation...${RESET}"
     for i in {1..10}; do
         show_progress $i 10 "Completing setup"
         sleep 0.5
