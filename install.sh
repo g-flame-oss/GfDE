@@ -342,35 +342,12 @@ setup_boot_animation() {
 #==============================================================================
 # DESKTOP ENVIRONMENT SETUP (the main course)
 #==============================================================================
-
-
-
-
-
-
-#Coming Soon!!
-
-
-
 setup_desktop_environment() {
     next_step "Setting up the GfDE desktop environment..."
-
-    
-    say_info "Starting the desktop environment setup..."
-
-    
+    chmod +x assets/GfDE.sh
+    bash GfDE.sh
     celebrate "GfDE desktop environment is ready! 🎨"
 }
-
-
-
-
-
-
-
-
-
-
 
 #==============================================================================
 # BOOTLOADER SETUP (making sure everything boots pretty)

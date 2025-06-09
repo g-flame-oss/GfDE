@@ -32,7 +32,7 @@
 ##########################################################################################
 [Plymouth Theme]
 Name=Arch Mac Style
-Description=Mac-like Plymouth theme for Arch Linux with PNG assets
+Description=Mac-like Plymouth theme for a mac like boot experience! 
 ModuleName=script
 
 [script]

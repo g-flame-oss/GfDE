@@ -1,9 +1,42 @@
 #==============================================================================
 # GfDE Plymouth theme
-# Version: 0.1
+# Version: 0.5
 # Author: g-flame (https://github.com/g-flame)
 # License: MIT
 #==============================================================================
+# Change these values to customize your boot splash
+# ===================================
+# Background Color (RGB values 0-1)
+BACKGROUND_RED = 0;
+BACKGROUND_GREEN = 0;
+BACKGROUND_BLUE = 0;
+
+# Logo Settings
+LOGO_IMAGE_FILE = "logo.png";
+LOGO_VERTICAL_POSITION = 0.3;  # How far down the screen (0.0 = top, 1.0 = bottom)
+
+# Progress Bar Appearance
+PROGRESS_BAR_WIDTH = 300;
+PROGRESS_BAR_HEIGHT = 12;
+PROGRESS_BAR_DISTANCE_FROM_LOGO = 60;  # Pixels below the logo
+PROGRESS_BACKGROUND_IMAGE = "progress_bg.png";
+PROGRESS_FILL_IMAGE = "progress_fill.png";
+PROGRESS_ANIMATION_SMOOTHNESS = 0.15;  # Lower = smoother but slower (0.01-1.0)
+
+# Text Settings
+TEXT_FONT = "Sans 12";
+TEXT_RED = 1;
+TEXT_GREEN = 1;
+TEXT_BLUE = 1;
+TEXT_ALPHA = 1;
+
+# Text Positioning (pixels below progress bar)
+MESSAGE_OFFSET = 40;
+QUESTION_OFFSET = 60;
+ANSWER_OFFSET = 80;
+
+# Password Display
+PASSWORD_BULLET = "●";
 ##########################################################################################
 #       Installer by G-flame @ https://github.com/g-flame                                
 #       Panel and Daemon by Airlinklabs @ https://github.com/airlinklabs                 
@@ -30,141 +63,171 @@
 #       OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE   
 #       SOFTWARE.                                                                        
 ##########################################################################################
-# Plymouth Script for Mac-like Arch Linux Theme
 
-# Screen and window setup
+# ===================================
+# SYSTEM SETUP - DON'T CHANGE BELOW
+# ===================================
+
+# Get screen size
 screen_width = Window.GetWidth();
 screen_height = Window.GetHeight();
-resolutions = Window.GetBitsPerPixel();
 
-# Set solid background color (black)
-Window.SetBackgroundTopColor(0, 0, 0);
-Window.SetBackgroundBottomColor(0, 0, 0);
+# Set the background color
+Window.SetBackgroundTopColor(BACKGROUND_RED, BACKGROUND_GREEN, BACKGROUND_BLUE);
+Window.SetBackgroundBottomColor(BACKGROUND_RED, BACKGROUND_GREEN, BACKGROUND_BLUE);
 
-# Load and setup logo
-logo_image = Image("logo.png");
+# ===================================
+# LOGO SETUP
+# ===================================
+
+# Load the logo and create a sprite
+logo_image = Image(LOGO_IMAGE_FILE);
 logo_sprite = Sprite(logo_image);
 
-# Position logo in center-top area
-logo_x = screen_width / 2 - logo_image.GetWidth() / 2;
-logo_y = screen_height * 0.3;
-logo_sprite.SetPosition(logo_x, logo_y);
+# Position the logo in the center horizontally and at the specified vertical position
+logo_x_position = screen_width / 2 - logo_image.GetWidth() / 2;
+logo_y_position = screen_height * LOGO_VERTICAL_POSITION;
+logo_sprite.SetPosition(logo_x_position, logo_y_position);
 
-# Progress bar setup (Mac-like thin progress bar)
-progress_bar_bg = Image("progress_bg.png");
-progress_bar_fill = Image("progress_fill.png");
+# ===================================
+# PROGRESS BAR SETUP
+# ===================================
 
-# Position progress bar below logo
-bar_width = 300;
-bar_height = 8;
-bar_x = screen_width / 2 - bar_width / 2;
-bar_y = logo_y + logo_image.GetHeight() + 60;
+# Calculate where the progress bar should be positioned
+progress_bar_x_position = screen_width / 2 - PROGRESS_BAR_WIDTH / 2;
+progress_bar_y_position = logo_y_position + logo_image.GetHeight() + PROGRESS_BAR_DISTANCE_FROM_LOGO;
 
-# Scale progress bar images
-progress_bar_bg = progress_bar_bg.Scale(bar_width, bar_height);
-progress_bar_fill = progress_bar_fill.Scale(bar_width, bar_height);
+# Create the progress bar background
+progress_background_sprite = Sprite(Image(PROGRESS_BACKGROUND_IMAGE).Scale(PROGRESS_BAR_WIDTH, PROGRESS_BAR_HEIGHT));
+progress_background_sprite.SetPosition(progress_bar_x_position, progress_bar_y_position);
 
-# Create progress bar sprites
-progress_bg_sprite = Sprite(progress_bar_bg);
-progress_bg_sprite.SetPosition(bar_x, bar_y);
-
+# Create the progress bar fill (starts empty)
 progress_fill_sprite = Sprite();
-progress_fill_sprite.SetPosition(bar_x, bar_y);
+progress_fill_sprite.SetPosition(progress_bar_x_position, progress_bar_y_position);
+progress_fill_sprite.SetOpacity(1);
 
-# Progress tracking
-progress = 0;
+# Pre-load and scale the fill image for better performance
+cached_progress_fill_image = Image(PROGRESS_FILL_IMAGE).Scale(PROGRESS_BAR_WIDTH, PROGRESS_BAR_HEIGHT);
 
-# Boot progress callback
-fun boot_progress_cb(duration, progress_val) {
-    progress = progress_val;
-    
-    # Calculate fill width based on progress
-    fill_width = bar_width * progress;
-    
-    # Create cropped fill image
-    if (fill_width > 0) {
-        fill_image = progress_bar_fill.Scale(fill_width, bar_height);
-        progress_fill_sprite.SetImage(fill_image);
-        progress_fill_sprite.SetOpacity(1);
+# Progress tracking variables
+current_progress_value = 0;
+target_progress_value = 0;
+
+# ===================================
+# TEXT DISPLAY SETUP
+# ===================================
+
+# Create reusable text sprites
+status_message_sprite = Sprite();
+user_question_sprite = Sprite();
+user_answer_sprite = Sprite();
+
+# Helper function to create and display text
+fun display_text(text_sprite, text_content, vertical_position) {
+    if (text_content != "") {
+        # Create the text image with our configured settings
+        text_image = Image.Text(text_content, TEXT_RED, TEXT_GREEN, TEXT_BLUE, TEXT_ALPHA, TEXT_FONT);
+        text_sprite.SetImage(text_image);
+        
+        # Center the text horizontally
+        text_x_position = screen_width / 2 - text_image.GetWidth() / 2;
+        text_sprite.SetPosition(text_x_position, vertical_position);
+        text_sprite.SetOpacity(1);
     } else {
-        progress_fill_sprite.SetOpacity(0);
+        # Hide the text if there's nothing to display
+        text_sprite.SetOpacity(0);
     }
 }
 
-Plymouth.SetBootProgressFunction(boot_progress_cb);
+# ===================================
+# PROGRESS BAR ANIMATION
+# ===================================
 
-# System update progress (for package manager operations)
-fun system_update_cb(progress_val) {
-    boot_progress_cb(0, progress_val);
-}
-
-Plymouth.SetUpdateStatusFunction(system_update_cb);
-
-# Root filesystem progress
-fun root_mounted_cb() {
-    # Fade in effect when root is mounted
-    logo_sprite.SetOpacity(1);
-}
-
-Plymouth.SetRootMountedFunction(root_mounted_cb);
-
-# Display message function
-message_sprite = Sprite();
-message_sprite.SetPosition(screen_width / 2, bar_y + 40);
-
-fun display_message_cb(text) {
-    message_image = Image.Text(text, 1, 1, 1, 1, "Sans 12");
-    message_sprite.SetImage(message_image);
-    message_sprite.SetPosition(screen_width / 2 - message_image.GetWidth() / 2, bar_y + 40);
-}
-
-Plymouth.SetDisplayMessageFunction(display_message_cb);
-
-# Password prompt (for encrypted systems)
-question_sprite = Sprite();
-answer_sprite = Sprite();
-
-fun display_question_cb(prompt, entry) {
-    question_image = Image.Text(prompt, 1, 1, 1, 1, "Sans 12");
-    question_sprite.SetImage(question_image);
-    question_sprite.SetPosition(screen_width / 2 - question_image.GetWidth() / 2, bar_y + 60);
+# Function called when boot progress updates
+fun handle_progress_update(duration, new_progress_value) {
+    target_progress_value = new_progress_value;
     
-    answer_image = Image.Text(entry, 1, 1, 1, 1, "Sans 12");
-    answer_sprite.SetImage(answer_image);
-    answer_sprite.SetPosition(screen_width / 2 - answer_image.GetWidth() / 2, bar_y + 80);
+    # Keep progress within valid range (0 to 1)
+    if (target_progress_value < 0) target_progress_value = 0;
+    if (target_progress_value > 1) target_progress_value = 1;
 }
 
-Plymouth.SetDisplayQuestionFunction(display_question_cb);
-
-# Normal vs password mode display
-fun display_normal_cb() {
-    question_sprite.SetOpacity(0);
-    answer_sprite.SetOpacity(0);
-}
-
-fun display_password_cb(prompt, bullets) {
-    question_image = Image.Text(prompt, 1, 1, 1, 1, "Sans 12");
-    question_sprite.SetImage(question_image);
-    question_sprite.SetPosition(screen_width / 2 - question_image.GetWidth() / 2, bar_y + 60);
-    question_sprite.SetOpacity(1);
+# Function to smoothly animate the progress bar
+fun animate_progress_bar() {
+    # Calculate the difference between current and target progress
+    progress_difference = target_progress_value - current_progress_value;
     
-    bullet_string = "";
-    for (i = 0; i < bullets; i++) {
-        bullet_string += "●";
+    # Only update if there's a meaningful difference
+    if (Math.Abs(progress_difference) > 0.001) {
+        # Smoothly move towards the target
+        current_progress_value += progress_difference * PROGRESS_ANIMATION_SMOOTHNESS;
+        
+        # Ensure we stay within bounds
+        if (current_progress_value < 0) current_progress_value = 0;
+        if (current_progress_value > 1) current_progress_value = 1;
+        
+        # Calculate how wide the fill should be
+        fill_width = PROGRESS_BAR_WIDTH * current_progress_value;
+        
+        if (fill_width > 1) {
+            # Crop the fill image to show the right amount of progress
+            cropped_fill_image = cached_progress_fill_image.Crop(0, 0, fill_width, PROGRESS_BAR_HEIGHT);
+            progress_fill_sprite.SetImage(cropped_fill_image);
+            progress_fill_sprite.SetOpacity(1);
+        } else {
+            # Hide the fill when it's too small to prevent flickering
+            progress_fill_sprite.SetOpacity(0);
+        }
+    }
+}
+
+# ===================================
+# PLYMOUTH EVENT HANDLERS
+# ===================================
+
+# Handle boot progress updates
+Plymouth.SetBootProgressFunction(handle_progress_update);
+Plymouth.SetUpdateStatusFunction(fun(progress_value) { 
+    handle_progress_update(0, progress_value); 
+});
+
+# Show logo when root filesystem is mounted
+Plymouth.SetRootMountedFunction(fun() { 
+    logo_sprite.SetOpacity(1); 
+});
+
+# Display status messages
+Plymouth.SetDisplayMessageFunction(fun(message_text) {
+    display_text(status_message_sprite, message_text, progress_bar_y_position + MESSAGE_OFFSET);
+});
+
+# Display questions and user input
+Plymouth.SetDisplayQuestionFunction(fun(question_text, user_input) {
+    display_text(user_question_sprite, question_text, progress_bar_y_position + QUESTION_OFFSET);
+    display_text(user_answer_sprite, user_input, progress_bar_y_position + ANSWER_OFFSET);
+});
+
+# Hide prompts in normal mode
+Plymouth.SetDisplayNormalFunction(fun() {
+    user_question_sprite.SetOpacity(0);
+    user_answer_sprite.SetOpacity(0);
+});
+
+# Display password prompts with bullets
+Plymouth.SetDisplayPasswordFunction(fun(password_prompt, bullet_count) {
+    display_text(user_question_sprite, password_prompt, progress_bar_y_position + QUESTION_OFFSET);
+    
+    # Create a string of bullets for the password
+    password_display = "";
+    for (i = 0; i < bullet_count; i++) {
+        password_display += PASSWORD_BULLET;
     }
     
-    answer_image = Image.Text(bullet_string, 1, 1, 1, 1, "Sans 12");
-    answer_sprite.SetImage(answer_image);
-    answer_sprite.SetPosition(screen_width / 2 - answer_image.GetWidth() / 2, bar_y + 80);
-    answer_sprite.SetOpacity(1);
-}
+    display_text(user_answer_sprite, password_display, progress_bar_y_position + ANSWER_OFFSET);
+});
 
-Plymouth.SetDisplayNormalFunction(display_normal_cb);
-Plymouth.SetDisplayPasswordFunction(display_password_cb);
+# Main animation loop
+Plymouth.SetRefreshFunction(fun() {
+    animate_progress_bar();
+});
 
-# Refresh function (called continuously)
-fun refresh_cb() {
-    # Any continuous animations can go here
-}
-
-Plymouth.SetRefreshFunction(refresh_cb);
