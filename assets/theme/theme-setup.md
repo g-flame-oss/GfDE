@@ -1,6 +1,6 @@
 # GNOME Theme Setup Guide
 
-![Extensions Banner](https://i.postimg.cc/vTHG4JyY/Gf-DE-v0-8-GNOME.gif)
+<img width="1600" height="900" alt="Screenshot From 2025-07-12 17-07-49" src="https://i.postimg.cc/vTHG4JyY/Gf-DE-v0-8-GNOME.gif" />
 
 A step-by-step guide to configure the GNOME Gtk theme and icon packs used in this setup.
 
