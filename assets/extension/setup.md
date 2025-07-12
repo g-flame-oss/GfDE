@@ -25,6 +25,9 @@ A step-by-step guide to configure the GNOME extensions used in this setup.
 **Install the following themes and they should look like this:** 
 > [!IMPORTANT]  
 >  Click the gear icon to edit the settings of an extension 
+
+
+
 [Extension-manager](guide-assets/extension-manager.png)
 
 
