@@ -4,6 +4,9 @@
 
 A step-by-step guide to configure the GNOME extensions used in this setup.
 
+> [!IMPORTANT]
+> Please reboot after installation!
+
 ---
 
 ## Extensions to Install
