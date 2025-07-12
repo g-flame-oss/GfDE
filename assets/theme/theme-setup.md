@@ -1,6 +1,6 @@
 # GNOME Theme Setup Guide
 
-[![Gf-DE-v0-8-GNOME.gif](../GfDE/assets/banner.png)](https://postimg.cc/LnhTh6Ct)
+![Gf-DE-v0-8-GNOME.gif](../GfDE/assets/banner.png)
 A step-by-step guide to configure the GNOME Gtk theme and icon packs used in this setup.
 
 > [!IMPORTANT]
