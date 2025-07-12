@@ -1,6 +1,6 @@
 # GfDE
 
-![Gf-DE-v0-8-GNOME.gif](../GfDE/assets/banner.png)
+![Gf-DE-v0-8-GNOME.gif](../banner.png)
 A repository containing everything you need to set up this environment.
 
 ---
