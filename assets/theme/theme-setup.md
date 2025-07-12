@@ -1,6 +1,6 @@
 # GNOME Theme Setup Guide
 
-![Extensions Banner](../GfDE-v0.8-GNOME.gif)
+![Extensions Banner](https://postimg.cc/ph7w71y4)
 
 A step-by-step guide to configure the GNOME Gtk theme and icon packs used in this setup.
 

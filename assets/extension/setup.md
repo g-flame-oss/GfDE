@@ -1,6 +1,6 @@
 # GNOME Extensions Setup Guide
 
-![Extensions Banner](../GfDE-v0.8-GNOME.gif)
+![Extensions Banner](https://postimg.cc/ph7w71y4)
 
 A step-by-step guide to configure the GNOME extensions used in this setup.
 
