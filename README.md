@@ -20,8 +20,8 @@ bash <(curl -s https://raw.githubusercontent.com/g-flame-oss/GfDE/refs/heads/mai
 
 After running the install script, follow the guide below to set up the recommended GNOME extensions:
 
-[GNOME Extensions Setup Guide](assets/extension/setup.md)
-[Theme & Icons Setup Guide](assets/theme/theme-setup.md)
+### [GNOME Extensions Setup Guide](assets/extension/setup.md)
+### [Theme & Icons Setup Guide](assets/theme/theme-setup.md)
 
 ---
 
@@ -29,7 +29,6 @@ After running the install script, follow the guide below to set up the recommend
 
 - Original Project:  
 - GfDE Developer: [G-flame](https://github.com/g-flame)
-- Guide Maintainer: [thavanish](https://github.com/thavanish)
 
 ---
 
