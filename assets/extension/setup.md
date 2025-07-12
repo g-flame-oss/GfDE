@@ -27,8 +27,9 @@ A step-by-step guide to configure the GNOME extensions used in this setup.
 
 ### 1. Arc Menu
 
+##### Go to extension manager > arc menu settings > about > load 
 **Import the configuration file:**  
-[arcmenu-conf](guide-assets/arcmenu-conf)
+###### [Arcmenu-conf](guide-assets/arcmenu-conf)
 
 ---
 
@@ -37,27 +38,32 @@ A step-by-step guide to configure the GNOME extensions used in this setup.
 **Follow the images below to set it up:**
 
 - Step 1  
+##### Go to extension manager > blur my shell > pipelines > add pipeline > add effects > native gaussin blur > then set as following
   ![Step-1](guide-assets/blur-my-shell-1.png)
 - Step 2  
+##### Go to extension manager > blur my shell > panel > then set as following
   ![Step-2](guide-assets/blur-my-shell-2.png)
 - Step 3  
+##### Go to extension manager > blur my shell > panel > then set as following
   ![Step-3](guide-assets/blur-my-shell-3.png)
 - Step 4  
+##### Go to extension manager > blur my shell > dash > then set as following
   ![Step-4](guide-assets/blur-my-shell-4.png)
 - Step 5  
+##### Go to extension manager > blur my shell > other > then set as following
   ![Step-5](guide-assets/blur-my-shell-5.png)
 
 ---
 
 ### 3. Dash to Panel
-
+##### Go to extension manager > dash to panel settings > about > import from file 
 **Import the configuration file:**  
 [dashtopanel-conf](guide-assets/dashtopanel-conf)
 
 ---
 
 ### 4. Open Bar
-
+##### Go to extension manager > dash to panel settings > settings admin > import 
 **Import the configuration file:**  
 [openbar-conf](guide-assets/openbar-conf)
 
@@ -68,8 +74,10 @@ A step-by-step guide to configure the GNOME extensions used in this setup.
 **Follow the images below to set it up:**
 
 - Step 1  
+##### Go to extension manager > dash to panel settings > hen set as following
   ![Step-1](guide-assets/vitals-1.png)
 - Step 2  
+##### click the vitals in the top bar (now bottom bar) > click on temprature > click on average > untick all other fields
   ![Step-2](guide-assets/vitals-2.png)
 
 ---
