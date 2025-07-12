@@ -1,6 +1,6 @@
 # GNOME Extensions Setup Guide
 
-![Gf-DE-v0-8-GNOME.gif](../banner.png)
+![Gf-DE-v0-8-GNOME.gif](banner.png)
 
 A step-by-step guide to configure the GNOME extensions used in this setup.
 
