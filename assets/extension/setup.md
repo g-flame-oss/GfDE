@@ -1,6 +1,6 @@
 # GNOME Extensions Setup Guide
 
-<img width="1600" height="900" alt="Screenshot From 2025-07-12 17-07-49" src="https://i.postimg.cc/vTHG4JyY/Gf-DE-v0-8-GNOME.gif" />
+[![Gf-DE-v0-8-GNOME.gif](https://i.postimg.cc/vTHG4JyY/Gf-DE-v0-8-GNOME.gif)](https://postimg.cc/ph7w71y4)
 
 A step-by-step guide to configure the GNOME extensions used in this setup.
 
