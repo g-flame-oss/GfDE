@@ -55,12 +55,13 @@ Follow the steps below to configure Blur My Shell:
   ![Step-2](guide-assets/blur-my-shell-2.png)
 
 - **Step 3:**  
-  Go to Extension Manager → Blur My Shell → Panel.  
+  Go to Extension Manager → Blur My Shell → dash.  
   Set the options as shown:  
   ![Step-3](guide-assets/blur-my-shell-3.png)
 
 - **Step 4:**  
-  Go to Extension Manager → Blur My Shell → Dash.  
+  Go to Extension Manager → Blur My Shell → Applications
+  .  
   Set the options as shown:  
   ![Step-4](guide-assets/blur-my-shell-4.png)
 
