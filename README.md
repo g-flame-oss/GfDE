@@ -1,48 +1,45 @@
 # GfDE
 
-![GfDE](banner.png)
-A repo containing the stuff neede to setup this (pic coming soon)
+![GfDE](assets/banner.png)
 
-## Introduction
+A repository containing everything you need to set up this environment.
 
-My hyprland,zsh,plymouth,sddm and Archinstall dots and configs with a install script to install it 
-
-## System Requirements
-
-- Arch Linux distribution
-- Administrator (root/sudo) privileges
-- Active network connection
+---
 
 ## Quick Installation
+
+To get started quickly, run the following command in your terminal:
 
 ```bash
 bash <(curl -s https://raw.githubusercontent.com/g-flame-oss/GfDE/refs/heads/main/clone.sh)
 ```
 
-## Key Features
+---
 
-- Automated dependency management
-- Confs install
-- dots install
-- customizeable boot screen by changing the logo.png 
+## Post-Installation Setup
 
-## Technical Support
+After running the install script, follow the guide below to set up the recommended GNOME extensions:
 
-For assistance with installation issues, please:
-
-2. Check [known issues](https://github.com/g-flame-oss/GfDE/issues)
-3. Submit a detailed bug report if necessary
-
-## Contributors
-
-- Original Project: [HyDE](https://github.com/HyDE-Project)
-- GfDE Dev: [G-flame](https://github.com/g-flame)
-
-## Legal Information
-
-This project is licensed under the [MIT License](LICENSE).
+[GNOME Extensions Setup Guide](assets/extension/setup.md)
+[Theme & Icons Setup Guide](assets/theme/theme-setup.md)
 
 ---
 
-**Note:** This installer Dots and Configs are independently maintained and not officially affiliated with the original HyDE project and its developers.
+## Contributors
 
+- Original Project:  
+- GfDE Developer: [G-flame](https://github.com/g-flame)
+- Guide Maintainer: [thavanish](https://github.com/thavanish)
+
+---
+
+## Credits
+
+- GNOME and GNOME Extensions are developed by the [GNOME Project](https://www.gnome.org/) and their respective extension authors.  
+- This setup uses third-party GNOME Shell extensions. Please see each extension's page for individual credits.
+
+---
+
+## License
+
+This project is licensed under the [MIT License](LICENSE)
