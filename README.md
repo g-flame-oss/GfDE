@@ -19,6 +19,10 @@ bash <(curl -s https://raw.githubusercontent.com/g-flame-oss/GfDE/refs/heads/mai
 ## Post-Installation Setup
 > [!IMPORTANT]
 > Please reboot before doing this setup!
+
+
+
+
 After running the install script, follow the guide below to set up the recommended GNOME extensions:
 
 ### [GNOME Extensions Setup Guide](assets/extension/setup.md)
