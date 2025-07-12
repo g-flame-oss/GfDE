@@ -1,7 +1,6 @@
 # GfDE
 
-[![Gf-DE-v0-8-GNOME.gif](https://i.postimg.cc/vTHG4JyY/Gf-DE-v0-8-GNOME.gif)](https://postimg.cc/ph7w71y4)
-
+![Gf-DE-v0-8-GNOME.gif](https://i.postimg.cc/tCNmSsFM/Gf-DE-v0-8-GNOME.gif)
 A repository containing everything you need to set up this environment.
 
 ---
