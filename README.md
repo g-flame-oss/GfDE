@@ -1,6 +1,6 @@
 # GfDE
 
-![GfDE](assets/banner.png)
+![GfDE](assets/GfDE-v0.8-GNOME.gif)
 
 A repository containing everything you need to set up this environment.
 
