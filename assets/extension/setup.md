@@ -28,7 +28,7 @@ A step-by-step guide to configure the GNOME extensions used in this setup.
 
 
 
-[Extension-manager](guide-assets/extension-manager.png)
+![Extension-manager](guide-assets/extension-manager.png)
 
 
 ### 1. Arc Menu
