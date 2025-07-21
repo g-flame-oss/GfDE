@@ -98,19 +98,19 @@ install_core() {
     
     case $OS in
         arch)
-            $INSTALL_CMD gnome gnome-extra gdm
+            $INSTALL_CMD gnome gnome-extra gdm noto-fonts
             sudo systemctl enable gdm
             ;;
         debian)
-            $INSTALL_CMD gnome-core gnome-shell-extensions gdm3
+            $INSTALL_CMD gnome-core gnome-shell-extensions gdm3 noto-fonts
             sudo systemctl enable gdm3
             ;;
         fedora)
-            $INSTALL_CMD @gnome-desktop gdm
+            $INSTALL_CMD @gnome-desktop gdm noto-fonts
             sudo systemctl enable gdm
             ;;
         opensuse)
-            $INSTALL_CMD gnome-desktop gdm
+            $INSTALL_CMD gnome-desktop gdm noto-fonts
             sudo systemctl enable gdm
             ;;
     esac
