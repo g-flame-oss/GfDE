@@ -3,6 +3,7 @@
 ![Gf-DE-v0-8-GNOME.gif](assets/banner.png)
 
 A repository containing everything you need to set up this environment.
+star the repo if you like it!
 
 ---
 
