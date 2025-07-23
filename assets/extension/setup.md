@@ -107,8 +107,6 @@ Follow the steps below to configure Vitals:
 ---
 
 ## Credits
-
-- Guide by [thavanish](https://github.com/thavanish)
 - Project by [G-flame](https://github.com/g-flame)
 - GNOME and GNOME Extensions are developed by the [GNOME Project](https://www.gnome.org/) and their respective extension authors.
 
