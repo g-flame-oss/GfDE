@@ -1,6 +1,9 @@
 # GfDE
 
 ![Gf-DE-v0-8-GNOME.gif](assets/banner.png)
+![GitHub last commit](https://img.shields.io/github/last-commit/g-flame-oss/GfDE?style=for-the-badge&labelColor=101418&color=9ccbfb)
+![GitHub Repo stars](https://img.shields.io/github/stars/g-flame-oss/GfDE?style=for-the-badge&labelColor=101418&color=b9c8da)
+![GitHub repo size](https://img.shields.io/github/repo-size/g-flame-oss/GfDE?style=for-the-badge&labelColor=101418&color=d3bfe6)
 
 A repository containing everything you need to set up this environment.
 star the repo if you like it!
